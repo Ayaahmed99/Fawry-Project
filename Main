@@ -1,0 +1,27 @@
+public class Main {
+    public static void main(String[] args) {
+ 
+        System.out.println("=== Gas car demo ===");
+        Car car = CarFactory.createCar(CarFactory.EngineType.GAS);
+        car.start();
+        car.accelerate();   // 20
+        car.accelerate();   // 40
+        car.accelerate();   // 60
+        car.brake();        // 40
+        car.brake();        // 20
+        car.brake();        // 0
+        car.stop();
+ 
+        System.out.println("\n=== Engine swap: gas → hybrid ===");
+        CarFactory.replaceEngine(car, CarFactory.EngineType.HYBRID);
+        car.start();
+        car.accelerate();   // 20  → electric active
+        car.accelerate();   // 40  → electric active
+        car.accelerate();   // 60  → gas active
+        car.brake();        // 40  → electric active
+        car.brake();        // 20
+        car.brake();        // 0
+        car.stop();
+    }
+}
+ 
