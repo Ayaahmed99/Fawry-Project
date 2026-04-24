@@ -1,69 +1,47 @@
 public class Car {
-    private static final int MAX_SPEED = 200;
-    private static final int SPEED_STEP = 20;
  
     private Engine engine;
     private int speed = 0;
-    private boolean running = false;
  
     public Car(Engine engine) {
         this.engine = engine;
     }
  
     public void start() {
-        if (running) { System.out.println("Car is already running."); return; }
         speed = 0;
-        running = true;
         System.out.println("Car started. Engine: " + engine);
     }
  
     public void stop() {
-        if (!running) { System.out.println("Car is already stopped."); return; }
-        if (speed != 0)
-            throw new IllegalStateException(
-                "Cannot stop: speed must be 0 before stopping (current: " + speed + " km/h).");
-        running = false;
+        if (speed != 0) {
+            System.out.println("Cannot stop: reduce speed to 0 first.");
+            return;
+        }
         System.out.println("Car stopped.");
     }
  
     public void accelerate() {
-        assertRunning();
-        if (speed >= MAX_SPEED) { System.out.println("Already at maximum speed (" + MAX_SPEED + " km/h)."); return; }
-        int newSpeed = Math.min(speed + SPEED_STEP, MAX_SPEED);
-        notifyEngine(newSpeed - speed, true);
-        speed = newSpeed;
+        if (speed >= 200) {
+            System.out.println("Already at max speed.");
+            return;
+        }
+        speed += 20;
+        engine.increase();
         System.out.println("Accelerated to " + speed + " km/h. Engine: " + engine);
     }
  
     public void brake() {
-        assertRunning();
-        if (speed == 0) { System.out.println("Already stopped (speed 0)."); return; }
-        int newSpeed = Math.max(speed - SPEED_STEP, 0);
-        notifyEngine(speed - newSpeed, false);
-        speed = newSpeed;
+        if (speed <= 0) {
+            System.out.println("Already stopped.");
+            return;
+        }
+        speed -= 20;
+        engine.decrease();
         System.out.println("Braked to " + speed + " km/h. Engine: " + engine);
     }
  
-    public void replaceEngine(Engine newEngine) {
-        this.engine = newEngine;
-        System.out.println("Engine replaced. New engine: " + engine);
-    }
- 
-    public Engine getEngine() { return engine; }
- 
-    private void assertRunning() {
-        if (!running) throw new IllegalStateException("Car is not running. Call start() first.");
-    }
- 
-    private void notifyEngine(int steps, boolean increasing) {
-        for (int i = 0; i < steps; i++) {
-            if (increasing) engine.increase();
-            else            engine.decrease();
-        }
-    }
- 
-    @Override
-    public String toString() {
-        return "Car(speed=" + speed + ", state=" + (running ? "running" : "stopped") + ", engine=" + engine + ")";
+    public void replaceEngine(Engine engine) {
+        this.engine = engine;
+        System.out.println("Engine replaced: " + engine);
     }
 }
