@@ -6,7 +6,11 @@ public class MixedHybridEngine implements Engine {
     private int speed = 0;
  
     private Engine activeEngine() {
-        return speed < ELECTRIC_THRESHOLD ? electric : gas;
+        if (speed < ELECTRIC_THRESHOLD) {
+    return electric;
+} else {
+    return gas;
+       }
     }
  
     @Override
