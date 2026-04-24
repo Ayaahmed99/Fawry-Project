@@ -1,0 +1,22 @@
+public class CarFactory {
+ 
+    public enum EngineType { GAS, ELECTRIC, HYBRID }
+ 
+    public static Car createCar(EngineType type) {
+        Engine engine = buildEngine(type);
+        System.out.println("Factory: creating car with " + engine.getClass().getSimpleName());
+        return new Car(engine);
+    }
+ 
+    public static void replaceEngine(Car car, EngineType type) {
+        car.replaceEngine(buildEngine(type));
+    }
+ 
+    private static Engine buildEngine(EngineType type) {
+        return switch (type) {
+            case GAS      -> new GasolineEngine();
+            case ELECTRIC -> new ElectronicEngine();
+            case HYBRID   -> new MixedHybridEngine();
+        };
+    }
+}
